@@ -1,0 +1,42 @@
+.table-footer {
+  border: 1px solid #ddd;
+  padding: 5px 0;
+}
+
+.table-footer a.disabled, .table-footer a:focus, .table-footer a:hover, .table-footer a:visited {
+  color: #333;
+}
+.table-footer a:hover {
+  text-decoration: none;
+}
+
+.models-table-wrapper {
+  margin-bottom: 20px;
+}
+
+.btn-default {
+  background-image: none !important;
+}
+
+.columns-dropdown {
+  margin-bottom: 20px;
+}
+
+.table-column-options.table > tbody > tr > td {
+  border-top-width: 0;
+}
+
+h5.fa-spinner-wrapper {
+  text-align: center;
+}
+
+div.file-content code {
+  background-color: #fff;
+  color: #555;
+  white-space: pre;
+}
+
+.tooltip-inner {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  max-width: 600px;
+}

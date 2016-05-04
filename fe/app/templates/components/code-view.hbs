@@ -1,0 +1,10 @@
+{{#if codeWithTooltips.length}}
+  <p><button class="btn btn-default tooltips-toggler" {{action "toggleTooltips"}}>Show/Hide Tooltips</button></p>
+  <div class="file-content">
+    <ol>
+      {{#each codeWithTooltips as |line|}}
+        <li><code>{{{line}}}</code></li>
+      {{/each}}
+    </ol>
+  </div>
+{{/if}}
