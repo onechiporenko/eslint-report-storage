@@ -7,7 +7,7 @@ use ERS\ReportsManager;
 use ERS\FilesManager;
 use ERS\RulesManager;
 
-$db = Db::obtain('localhost', 'root', '', 'eslint', '');
+$db = Db::obtain('localhost', 'root', 'KronuS', 'eslint', '');
 $db->connectPDO();
 
 $klein = new \Klein\Klein();

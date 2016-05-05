@@ -24,7 +24,7 @@ $commitDate = getLastCommitDate();
 $allJsFiles = shell_exec('find ' . APP . '  -type f -name "*.js"');
 $allJsFiles = explode("\n", $allJsFiles);
 
-$db = ERS\Db::obtain('localhost', 'root', '', 'eslint', '');
+$db = ERS\Db::obtain('localhost', 'root', 'KronuS', 'eslint', '');
 $db->connectPDO();
 $f = $db->fetchArrayPDO('select * from files');
 $f = formatIdsKeys($f, 'path');
