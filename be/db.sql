@@ -4,7 +4,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `eslint`
 --
-CREATE DATABASE IF NOT EXISTS `eslint` DEFAULT CHARACTER SET utf8 COLLATE utf8_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `eslint` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `eslint`;
 
 -- --------------------------------------------------------
@@ -13,9 +13,30 @@ USE `eslint`;
 -- Table structure for table `files`
 --
 
+DROP TABLE IF EXISTS `files`;
 CREATE TABLE IF NOT EXISTS `files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `path` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `project_id` (`project_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects`
+--
+
+DROP TABLE IF EXISTS `projects`;
+CREATE TABLE IF NOT EXISTS `projects` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `path` varchar(1000) NOT NULL,
+  `subpath` varchar(1000) NOT NULL,
+  `description` text NOT NULL,
+  `repo` varchar(1000) NOT NULL,
+  `raw` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -25,13 +46,16 @@ CREATE TABLE IF NOT EXISTS `files` (
 -- Table structure for table `reports`
 --
 
+DROP TABLE IF EXISTS `reports`;
 CREATE TABLE IF NOT EXISTS `reports` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `hash` varchar(40) CHARACTER SET utf8 NOT NULL,
   `errors` int(10) unsigned NOT NULL DEFAULT '0',
   `warnings` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `project_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -40,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `reports` (
 -- Table structure for table `report_details_by_file`
 --
 
+DROP TABLE IF EXISTS `report_details_by_file`;
 CREATE TABLE IF NOT EXISTS `report_details_by_file` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `file_id` int(10) unsigned NOT NULL,
@@ -58,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `report_details_by_file` (
 -- Table structure for table `report_details_by_rule`
 --
 
+DROP TABLE IF EXISTS `report_details_by_rule`;
 CREATE TABLE IF NOT EXISTS `report_details_by_rule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `rule_id` int(10) unsigned NOT NULL,
@@ -75,15 +101,29 @@ CREATE TABLE IF NOT EXISTS `report_details_by_rule` (
 -- Table structure for table `rules`
 --
 
+DROP TABLE IF EXISTS `rules`;
 CREATE TABLE IF NOT EXISTS `rules` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `files`
+--
+ALTER TABLE `files`
+ADD CONSTRAINT `files_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`);
+
+--
+-- Constraints for table `reports`
+--
+ALTER TABLE `reports`
+ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`);
 
 --
 -- Constraints for table `report_details_by_file`

@@ -2,13 +2,20 @@
 
 namespace ERS;
 
-abstract class DataManager {
+abstract class DataManager
+{
 
-    public function getById($id) {}
+    public function getById($id)
+    {
+    }
 
-    public function deleteById($id) {}
+    public function deleteById($id)
+    {
+    }
 
-    public function getMany() {}
+    public function getMany()
+    {
+    }
 
     protected function _reformatSingle($data, $type)
     {
@@ -23,9 +30,10 @@ abstract class DataManager {
         return $d;
     }
 
-    protected function _reformatMultiple($data, $type) {
+    protected function _reformatMultiple($data, $type)
+    {
         $d = ['data' => []];
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $_d = [
                 'type' => $type,
                 'id' => intval($row['id']),

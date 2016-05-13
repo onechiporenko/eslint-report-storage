@@ -1,0 +1,32 @@
+{{#if model.isReloading}}
+  {{render "loading"}}
+{{else}}
+  <div class="row">
+    <div class="col-md-5">
+      <p>Commit <a target="_blank" href="{{repo}}/commit/{{model.hash}}">{{model.hash}}</a> <i class="fa fa-github"></i></p>
+      <p>{{model.date}}</p>
+    </div>
+    <div class="col-md-7">
+      {{high-charts content=chartData chartOptions=chartOptions}}
+    </div>
+  </div>
+
+  <h3>Files</h3>
+  {{models-table
+    data=model.details.files
+    columns=fileColumns
+    showGlobalFilter=false
+    showColumnsDropdown=false
+    multipleColumnsSorting=false
+    reportId=model.id
+  }}
+
+  <h3>Rules</h3>
+  {{models-table
+    data=model.details.rules
+    columns=ruleColumns
+    showGlobalFilter=false
+    showColumnsDropdown=false
+    multipleColumnsSorting=false
+  }}
+{{/if}}

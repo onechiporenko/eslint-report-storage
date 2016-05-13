@@ -1,0 +1,5 @@
+{{#if reportId}}
+  {{#link-to 'projects.project.files.file.reports.report' record.file_id reportId}}{{record.path}}{{/link-to}}
+{{else}}
+  {{#link-to 'projects.project.files.file' record.file_id}}{{record.path}}{{/link-to}}
+{{/if}}

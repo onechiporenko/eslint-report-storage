@@ -1,0 +1,27 @@
+import Ember from 'ember';
+
+const {
+  set,
+  get
+} = Ember;
+
+export default Ember.Route.extend({
+
+  breadCrumb: {},
+
+  afterModel(model) {
+    const id = get(model, 'id');
+    set(this, 'breadCrumb', {title: id});
+    return model.reload();
+  },
+
+  model(params) {
+    return this.store.findRecord('report', params.report_id, {reload: true});
+  },
+
+  setupController(controller, model) {
+    this._super(controller, model);
+    controller.set('repo', this.modelFor('projects.project').get('repo'));
+  }
+
+});

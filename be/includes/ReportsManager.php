@@ -12,6 +12,7 @@ class ReportsManager extends DataManager
     {
         $db = Db::obtain();
         $report = $db->queryFirstPDO('select * from reports where id = ?', ['id' => $id]);
+        $path = $db->queryFirstPDO('select path from projects where id = ?', ['id' => $report['project_id']])['path'];
         if (!$report) {
             return false;
         }
@@ -22,8 +23,12 @@ class ReportsManager extends DataManager
         if ($report && $file_details && $rule_details) {
             $errors = $report['data']['attributes']['errors'];
             $warnings = $report['data']['attributes']['warnings'];
+            $files = $this->_withPercents($file_details, $errors, $warnings);
+            foreach($files as $k=>$file) {
+                $files[$k]['path'] = str_replace($path, '', $file['path']);
+            }
             $report['data']['attributes']['details'] = [
-                'files' => $this->_withPercents($file_details, $errors, $warnings),
+                'files' => $files,
                 'rules' => $this->_withPercents($rule_details, $errors, $warnings)
             ];
             return $report;
@@ -39,9 +44,12 @@ class ReportsManager extends DataManager
         $db->deletePDO('reports', ['id' => $id]);
     }
 
-    public function getMany() {
+    public function getMany($query = [])
+    {
         $db = Db::obtain();
-        $reports = $db->fetchArrayPDO('select count(distinct rdf.file_id) as files, count(distinct rdr.rule_id) as rules, r.* from reports as r, report_details_by_file as rdf, report_details_by_rule as rdr where r.id = rdf.report_id and r.id = rdr.report_id group by r.id order by r.id asc');
+        $additionalSql = array_key_exists('project_id', $query) ? ' where project_id = ' . intval($query['project_id']) : '';
+        $sql = 'select * from reports' . $additionalSql;
+        $reports = $db->fetchArrayPDO($sql);
         $reports = $reports ? $reports : [];
         return $this->_reformatMultiple($reports, 'report');
     }

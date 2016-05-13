@@ -1,0 +1,6 @@
+<p class="alert alert-danger">
+  {{#each model.errors.messages as |message|}}
+    {{message}}
+  {{/each}}
+</p>
+<p>Go to {{#link-to "projects"}}projects{{/link-to}}</p>

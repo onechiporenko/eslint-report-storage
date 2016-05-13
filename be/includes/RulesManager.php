@@ -8,9 +8,11 @@ use ERS\DataManager;
 class RulesManager extends DataManager
 {
 
-    public function getMany() {
-        $db = Db::obtain();
-        $files = $db->fetchArrayPDO('select * from rules');
+    public function getMany($query = [])
+    {
+        $additionalSql = array_key_exists('project_id', $query) ? ' where project_id = ' . intval($query['project_id']) : '';
+        $sql = 'select * from rules ' . $additionalSql;
+        $files = Db::obtain()->fetchArrayPDO($sql);
         return $this->_reformatMultiple($files, 'rule');
     }
 
@@ -22,7 +24,7 @@ class RulesManager extends DataManager
         if ($file) {
             $file = $this->_reformatSingle($file, 'rule');
             $file['data']['attributes']['reports'] = [];
-            foreach($reports as $report) {
+            foreach ($reports as $report) {
                 unset ($report['rule_id']);
                 unset ($report['id']);
                 $report['errors'] = intval($report['errors']);
