@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../vendor/autoload.php';
 
 $db = ERS\Db::obtain();
 
@@ -16,16 +15,9 @@ foreach($projects['data'] as $project) {
     $pId = $project['id'];
     $remoteHash = getRemoteHash($path);
     $localHash = getLocalHash($path);
-    if ($remoteHash === $localHash) {
-        echo 'no new commits' . "\n";
-        continue;
-    }
+
     doPullRebase($path);
-    $diff = getJsFilesDiff($path, $localHash, $remoteHash);
-    if (!$diff) {
-        echo 'no diff' . "\n";
-        continue;
-    }
+
     $subpath = $path . $project['attributes']['subpath'];
     runESLint($subpath);
     $commitHash = getLastCommitHash($path);

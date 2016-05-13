@@ -1,6 +1,5 @@
 <?php
 
-require './vendor/autoload.php';
 require './config.php';
 
 use ERS\Db;
