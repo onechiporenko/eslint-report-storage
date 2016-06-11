@@ -19,6 +19,27 @@ $db = Db::obtain();
 
 $klein = new \Klein\Klein();
 
+function subResForProject($request, $response, $service, $app, $managerName) {
+    $uri = parse_url($request->uri());
+    $query = array_key_exists('query', $uri) ? $uri['query'] : '';
+    parse_str($query, $query);
+    $instances = $app->{$managerName}->all($query);
+    $response->body($app->encoder->encodeData($instances));
+    $response->send();
+}
+
+function subResForProjectById($request, $response, $service, $app, $managerName) {
+    $instanceId = $request->paramsNamed()->id;
+    $instance = $app->{$managerName}->oneById($instanceId);
+    if ($instance) {
+        $response->body($app->encoder->encodeData($instance));
+        $response->send();
+    } else {
+        $response->code(404);
+        $response->json(['errors' => ['messages' => ['Data for id "' . $instanceId . '" is not found']]]);
+    }
+}
+
 $klein->respond(function ($request, $response, $service, $app) {
     $app->register('projectsManager', function () {
         return new ERS\Managers\ProjectsManager();
@@ -44,24 +65,11 @@ $klein->respond(function ($request, $response, $service, $app) {
 });
 
 $klein->respond('GET', '/files', function ($request, $response, $service, $app) {
-    $uri = parse_url($request->uri());
-    $query = array_key_exists('query', $uri) ? $uri['query'] : '';
-    parse_str($query, $query);
-    $files = $app->filesManager->all($query);
-    $response->body($app->encoder->encodeData($files));
-    $response->send();
+    subResForProject($request, $response, $service, $app, 'filesManager');
 });
 
 $klein->respond('GET', '/files/[i:id]', function ($request, $response, $service, $app) {
-    $instanceId = $request->paramsNamed()->id;
-    $file = $app->filesManager->oneById($instanceId);
-    if ($file) {
-        $response->body($app->encoder->encodeData($file));
-        $response->send();
-    } else {
-        $response->code(404);
-        $response->json(['errors' => ['messages' => ['File with id "' . $instanceId . '" not found']]]);
-    }
+    subResForProjectById($request, $response, $service, $app, 'filesManager');
 });
 
 $klein->respond('GET', '/files/[i:id]/[i:report_id]', function ($request, $response, $service, $app) {
@@ -95,45 +103,19 @@ $klein->respond('GET', '/files/[i:id]/[i:report_id]/results', function ($request
 });
 
 $klein->respond('GET', '/rules', function ($request, $response, $service, $app) {
-    $uri = parse_url($request->uri());
-    $query = array_key_exists('query', $uri) ? $uri['query'] : '';
-    parse_str($query, $query);
-    $rules = $app->rulesManager->all($query);
-    $response->body($app->encoder->encodeData($rules));
-    $response->send();
+    subResForProject($request, $response, $service, $app, 'rulesManager');
 });
 
 $klein->respond('GET', '/rules/[i:id]', function ($request, $response, $service, $app) {
-    $instanceId = $request->paramsNamed()->id;
-    $rule = $app->rulesManager->oneById($instanceId);
-    if ($rule) {
-        $response->body($app->encoder->encodeData($rule));
-        $response->send();
-    } else {
-        $response->code(404);
-        $response->json(['errors' => ['messages' => ['Data for rule id "' . $instanceId . '" not found']]]);
-    }
+    subResForProjectById($request, $response, $service, $app, 'rulesManager');
 });
 
 $klein->respond('GET', '/reports', function ($request, $response, $service, $app) {
-    $uri = parse_url($request->uri());
-    $query = array_key_exists('query', $uri) ? $uri['query'] : '';
-    parse_str($query, $query);
-    $reports = $app->reportsManager->all($query);
-    $response->body($app->encoder->encodeData($reports));
-    $response->send();
+    subResForProject($request, $response, $service, $app, 'reportsManager');
 });
 
 $klein->respond('GET', '/reports/[i:id]', function ($request, $response, $service, $app) {
-    $reportId = $request->paramsNamed()->id;
-    $report = $app->reportsManager->oneById($reportId);
-    if ($report) {
-        $response->body($app->encoder->encodeData($report));
-        $response->send();
-    } else {
-        $response->code(404);
-        $response->json(['errors' => ['messages' => ['Data for report id "' . $reportId . '" not found']]]);
-    }
+    subResForProjectById($request, $response, $service, $app, 'reportsManager');
 });
 
 $klein->respond('DELETE', '/reports/[i:id]', function ($request, $response, $service, $app) {
