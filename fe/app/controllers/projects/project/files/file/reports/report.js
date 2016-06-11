@@ -39,7 +39,8 @@ export default Ember.Controller.extend({
     var self = this;
     if(reportId && fileId && !reportByFileIsLoaded) {
       $.get(`/files/${fileId}/${reportId}`).then(function (fileContent) {
-        self.set('fileContent', fileContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').split('\n'));
+        var _content = fileContent.content;
+        self.set('fileContent', _content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').split('\n'));
         $.getJSON(`/files/${fileId}/${reportId}/results`).then(function (results) {
           self.set('reportByFile', results.data);
           self.set('reportByFileIsLoaded', true);

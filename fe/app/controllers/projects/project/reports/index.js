@@ -63,7 +63,7 @@ export default Ember.Controller.extend({
     const model = this.get('model').sortBy('id');
     return [
       {name: 'Errors', data: model.mapBy('errors')},
-      {name: 'Warnings', data: model.mapBy('warnings')}
+      {name: 'Warnings', data: model.mapBy('warnings'), visible: false}
     ];
   })
 

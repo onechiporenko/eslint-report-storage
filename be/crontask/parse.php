@@ -4,21 +4,21 @@ require_once __DIR__ . '/../config.php';
 
 $db = ERS\Db::obtain();
 
-$pManager = new ERS\ProjectsManager();
-$rManager = new ERS\RulesManager();
-$fManager = new ERS\FilesManager();
+$pManager = new ERS\Managers\ProjectsManager();
+$rManager = new ERS\Managers\RulesManager();
+$fManager = new ERS\Managers\FilesManager();
 
-$projects = $pManager->getMany();
+$projects = $pManager->all();
 
-foreach($projects['data'] as $project) {
-    $path = $project['attributes']['path'];
-    $pId = $project['id'];
+foreach($projects as $project) {
+    $path = $project->path;
+    $pId = $project->id;
     $remoteHash = getRemoteHash($path);
     $localHash = getLocalHash($path);
 
     doPullRebase($path);
 
-    $subpath = $path . $project['attributes']['subpath'];
+    $subpath = $path . $project->subpath;
     runESLint($subpath);
     $commitHash = getLastCommitHash($path);
     $commitDate = getLastCommitDate($path);

@@ -1,38 +1,33 @@
 <?php
 
-namespace ERS;
+namespace ERS\Managers;
 
 use ERS\Db;
-use ERS\DataManager;
 
 class FilesManager extends DataManager
 {
 
-    public function getMany($query = [])
-    {
-        $additionalSql = array_key_exists('project_id', $query) ? ' where project_id = ' . intval($query['project_id']) : '';
-        $sql = 'select * from files ' . $additionalSql;
-        $files = Db::obtain()->fetchArrayPDO($sql);
-        return $this->_reformatMultiple($files, 'file');
-    }
+    use SubResForProjects;
 
-    public function getById($id)
+    protected $_modelClass = 'ERS\Models\File';
+    protected $_modelTable = 'files';
+
+    public function oneById($id)
     {
         $db = Db::obtain();
-        $file = $db->queryFirstPDO('select * from files where id = ?', ['id' => $id]);
+        $instance = $db->queryFirstPDO('select * from '.$this->_modelTable.' where id = ?', ['id' => $id]);
         $reports = $db->fetchArrayPDO('select * from report_details_by_file where file_id = ?', ['id' => $id]);
-        if ($file) {
-            $file = $this->_reformatSingle($file, 'file');
-            $file['data']['attributes']['reports'] = [];
+        if ($instance) {
+            $instance['reports'] = [];
             foreach ($reports as $report) {
                 unset ($report['file_id']);
                 unset ($report['id']);
                 $report['errors'] = intval($report['errors']);
                 $report['warnings'] = intval($report['warnings']);
                 $report['report_id'] = intval($report['report_id']);
-                array_push($file['data']['attributes']['reports'], $report);
+                array_push($instance['reports'], $report);
             }
-            return $file;
+            return $this->createModelInstance($instance);
         }
         return false;
     }

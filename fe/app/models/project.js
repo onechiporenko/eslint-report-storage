@@ -14,6 +14,8 @@ export default Model.extend({
 
   reports: hasMany('report'),
 
+  files: hasMany('file'),
+
   repo: attr('string')
 
 });

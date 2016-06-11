@@ -16,7 +16,7 @@ export default Ember.Route.extend({
   },
 
   model(params) {
-    return this.store.findRecord('rule', params.rule_id, {reload: true});
+    return this.store.findRecord('rule', params.rule_id);
   }
 
 });

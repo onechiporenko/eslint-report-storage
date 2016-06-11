@@ -11,12 +11,12 @@ export default Ember.Route.extend({
 
   afterModel(model) {
     const path = get(model, 'path');
-    const projectPath = this.modelFor('projects.project').get('path');
+    const projectPath = get(model, 'project.path');
     set(this, 'breadCrumb', {title: path.replace(projectPath, '')});
     return model.reload();
   },
 
   model(params) {
-    return this.store.findRecord('file', params.file_id, {reload: true});
+    return this.store.findRecord('file', params.file_id);
   }
 });

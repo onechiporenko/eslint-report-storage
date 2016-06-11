@@ -15,7 +15,7 @@ export default Ember.Route.extend({
   },
 
   model(params) {
-    return this.store.findRecord('project', params.project_id, {reload: true});
+    return this.store.findRecord('project', params.project_id);
   },
 
   setupController(controller, model) {
