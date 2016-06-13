@@ -29,7 +29,7 @@ export default Ember.Controller.extend({
         text: 'Dynamic of the Problems'
       },
       xAxis: {
-        categories: model.mapBy('id').sort(),
+        categories: model.mapBy('id'),
         labels: {
           formatter: function () {
             // click on x-axis navigates to the report details page
@@ -60,7 +60,7 @@ export default Ember.Controller.extend({
     };
   }),
   chartData: computed('model.@each.{errors,warnings}', function () {
-    const model = this.get('model').sortBy('id');
+    const model = this.get('model');
     return [
       {name: 'Errors', data: model.mapBy('errors')},
       {name: 'Warnings', data: model.mapBy('warnings'), visible: false}

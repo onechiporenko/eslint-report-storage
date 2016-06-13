@@ -15,7 +15,7 @@ trait SubResForProjects
     public function getGroupedByProjectId()
     {
         $db = Db::obtain();
-        $sql = 'select * from ' . $this->_modelTable;
+        $sql = 'select * from ' . $this->_modelTable. ' order by id';
         $instances = $db->fetchArrayPDO($sql);
         if (!$instances) {
             return [];
