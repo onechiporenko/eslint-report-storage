@@ -10,7 +10,7 @@ export default Ember.Controller.extend({
     {
       title: 'ID',
       template: 'projects/project/reports/to-report',
-      sortedBy: 'id'
+      sortedBy: 'numericId'
     },
     {propertyName: 'date'},
     {propertyName: 'hash'},
