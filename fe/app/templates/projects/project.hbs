@@ -1,9 +1,22 @@
 <h3>{{model.name}}</h3>
 <p>{{model.description}}</p>
-<p>
-  {{#link-to "projects.project.reports" model.id classNames="btn btn-info" tagName="button"}}Reports{{/link-to}}
-  {{#link-to "projects.project.files" model.id classNames="btn btn-info" tagName="button"}}Files{{/link-to}}
-  {{#link-to "projects.project.rules" model.id classNames="btn btn-info" tagName="button"}}Rules{{/link-to}}
-</p>
+
+<ul class="nav nav-tabs">
+  {{#link-to "projects.project.reports" model tagName="li"}}
+    {{#link-to "projects.project.reports" model}}
+      Reports
+    {{/link-to}}
+  {{/link-to}}
+  {{#link-to "projects.project.files" model tagName="li"}}
+    {{#link-to "projects.project.files" model}}
+      Files
+    {{/link-to}}
+  {{/link-to}}
+  {{#link-to "projects.project.rules" model tagName="li"}}
+    {{#link-to "projects.project.rules" model}}
+      Rules
+    {{/link-to}}
+  {{/link-to}}
+</ul>
 
 {{outlet}}
