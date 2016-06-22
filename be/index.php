@@ -120,6 +120,8 @@ $klein->respond('GET', '/reports/[i:id]', function ($request, $response, $servic
 
 $klein->respond('DELETE', '/reports/[i:id]', function ($request, $response, $service, $app) {
     $app->reportsManager->deleteById($request->paramsNamed()->id);
+    $response->code(204);
+    $response->send();
 });
 
 $klein->respond('GET', '/projects', function ($request, $response, $service, $app) {

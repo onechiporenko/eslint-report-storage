@@ -15,7 +15,8 @@ export default Ember.Controller.extend({
     {propertyName: 'date'},
     {propertyName: 'hash'},
     {propertyName: 'errors'},
-    {propertyName: 'warnings'}
+    {propertyName: 'warnings'}/*,
+    {title: 'Delete', template: 'projects/project/reports/delete-report'}*/
   ],
 
   chartOptions: computed('model.@each.date', function () {
@@ -65,6 +66,12 @@ export default Ember.Controller.extend({
       {name: 'Errors', data: model.mapBy('errors')},
       {name: 'Warnings', data: model.mapBy('warnings'), visible: false}
     ];
-  })
+  }),
+
+  actions: {
+    deleteReport(model) {
+      model.destroyRecord();
+    }
+  }
 
 });
