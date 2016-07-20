@@ -12,14 +12,11 @@ export default Ember.Route.extend({
   afterModel(model) {
     const name = get(model, 'name');
     set(this, 'breadCrumb', {title: name});
+    this.transitionTo('projects.project.reports.index', model);
   },
 
   model(params) {
     return this.store.findRecord('project', params.project_id);
-  },
-
-  setupController(controller, model) {
-    this._super(controller, model);
   }
 
 });
