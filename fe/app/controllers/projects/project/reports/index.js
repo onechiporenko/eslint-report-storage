@@ -29,6 +29,11 @@ export default Ember.Controller.extend({
       title: {
         text: 'Dynamic of the Problems'
       },
+      tooltip: {
+        formatter: function() {
+          return '<b>' + this.point.date + '</b><br />' + this.series.name + ': ' + this.point.y;
+        }
+      },
       xAxis: {
         categories: model.mapBy('id'),
         labels: {
@@ -63,10 +68,16 @@ export default Ember.Controller.extend({
   chartData: computed('model.@each.{errors,warnings}', function () {
     const model = this.get('model');
     return [
-      {name: 'Errors', data: model.mapBy('errors')},
-      {name: 'Warnings', data: model.mapBy('warnings'), visible: false}
+      {name: 'Errors', data: this._prepareSeries('errors')},
+      {name: 'Warnings', data: this._prepareSeries('warnings'), visible: false}
     ];
   }),
+
+  _prepareSeries (k) {
+    return this.get('model').map(report => {
+      return {y: report.get(k), date: report.get('date')}
+    });
+  },
 
   actions: {
     deleteReport(model) {
