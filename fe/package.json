@@ -36,7 +36,7 @@
     "ember-crumbly": "1.0.2",
     "ember-data": "^2.5.0",
     "ember-export-application-global": "^1.0.5",
-    "ember-highcharts": "0.4.3",
+    "ember-highcharts": "0.7.0",
     "ember-load-initializers": "^0.5.1",
     "ember-models-table": "^1.8.1-beta.2",
     "ember-resolver": "^2.0.3",
